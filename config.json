@@ -1,0 +1,147 @@
+{
+    "title": "iPad Deck",
+    "port": 5000,
+    "columns": 5,
+    "buttons": [
+        {
+            "id": "vol_up",
+            "label": "Vol +",
+            "icon": "🔊",
+            "color": "#2196F3",
+            "action": {"type": "key", "key": "volume_up"}
+        },
+        {
+            "id": "vol_down",
+            "label": "Vol -",
+            "icon": "🔉",
+            "color": "#2196F3",
+            "action": {"type": "key", "key": "volume_down"}
+        },
+        {
+            "id": "mute",
+            "label": "Mute",
+            "icon": "🔇",
+            "color": "#2196F3",
+            "action": {"type": "key", "key": "volume_mute"}
+        },
+        {
+            "id": "play_pause",
+            "label": "Play / Pause",
+            "icon": "⏯️",
+            "color": "#4CAF50",
+            "action": {"type": "key", "key": "media_play_pause"}
+        },
+        {
+            "id": "prev_track",
+            "label": "Previous",
+            "icon": "⏮️",
+            "color": "#4CAF50",
+            "action": {"type": "key", "key": "media_prev"}
+        },
+        {
+            "id": "next_track",
+            "label": "Next",
+            "icon": "⏭️",
+            "color": "#4CAF50",
+            "action": {"type": "key", "key": "media_next"}
+        },
+        {
+            "id": "stop",
+            "label": "Stop",
+            "icon": "⏹️",
+            "color": "#4CAF50",
+            "action": {"type": "key", "key": "media_stop"}
+        },
+        {
+            "id": "screenshot",
+            "label": "Screenshot",
+            "icon": "📸",
+            "color": "#FF9800",
+            "action": {"type": "shortcut", "keys": ["win", "shift", "s"]}
+        },
+        {
+            "id": "notepad",
+            "label": "Notepad",
+            "icon": "📝",
+            "color": "#9C27B0",
+            "action": {"type": "app", "path": "notepad.exe"}
+        },
+        {
+            "id": "browser",
+            "label": "Firefox",
+            "icon": "🦊",
+            "color": "#FF7139",
+            "action": {"type": "command", "cmd": "start firefox"}
+        },
+        {
+            "id": "explorer",
+            "label": "Explorer",
+            "icon": "📁",
+            "color": "#9C27B0",
+            "action": {"type": "app", "path": "explorer.exe"}
+        },
+        {
+            "id": "lock",
+            "label": "Lock PC",
+            "icon": "🔒",
+            "color": "#f44336",
+            "action": {"type": "command", "cmd": "rundll32.exe user32.dll,LockWorkStation"}
+        },
+        {
+            "id": "sleep",
+            "label": "Sleep",
+            "icon": "💤",
+            "color": "#f44336",
+            "action": {"type": "command", "cmd": "rundll32.exe powrprof.dll,SetSuspendState 0,1,0"}
+        },
+        {
+            "id": "task_manager",
+            "label": "Task Mgr",
+            "icon": "⚙️",
+            "color": "#607D8B",
+            "action": {"type": "shortcut", "keys": ["ctrl", "shift", "escape"]}
+        },
+        {
+            "id": "mic_mute",
+            "label": "Mute Mic",
+            "icon": "🔇",
+            "color": "#E91E63",
+            "action": {"type": "mic_mute"}
+        },
+        {
+            "id": "oneclient",
+            "label": "OneClient",
+            "icon": "🎮",
+            "color": "#00BCD4",
+            "action": {"type": "app", "path": "\"%LOCALAPPDATA%\\OneClient\\oneclient_app.exe\""}
+        },
+        {
+            "id": "clip",
+            "label": "Clip",
+            "icon": "🎬",
+            "color": "#107C10",
+            "action": {"type": "shortcut", "keys": ["win", "alt", "g"]}
+        },
+        {
+            "id": "spotify",
+            "label": "Spotify",
+            "icon": "🎵",
+            "color": "#1DB954",
+            "action": {"type": "command", "cmd": "start spotify:"}
+        },
+        {
+            "id": "discord",
+            "label": "Discord",
+            "icon": "💬",
+            "color": "#5865F2",
+            "action": {"type": "app", "path": "\"%LOCALAPPDATA%\\Discord\\Discord.exe\""}
+        },
+        {
+            "id": "mic_unmute",
+            "label": "Unmute Mic",
+            "icon": "🎙️",
+            "color": "#4CAF50",
+            "action": {"type": "mic_unmute"}
+        }
+    ]
+}

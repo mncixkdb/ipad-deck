@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="{{ title }}">
+    <title>{{ title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            min-height: 100%;
+        }
+
+        body {
+            background: #0d1117;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            color: #e6edf3;
+            -webkit-user-select: none;
+            user-select: none;
+            padding: 12px;
+            padding-top: constant(safe-area-inset-top);  /* iOS 10 */
+            padding-top: env(safe-area-inset-top);
+        }
+
+        /* ── Header ─────────────────────────────── */
+        .header {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+            padding: 8px 4px 12px 4px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .status {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: #1a3a2a;
+            color: #3fb950;
+        }
+
+        .status.error {
+            background: #3a1a1a;
+            color: #f85149;
+        }
+
+        /* ── Button Grid ────────────────────────── */
+        .grid {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-align-content: flex-start;
+            align-content: flex-start;
+        }
+
+        /* ── Button (grid cell) ─────────────────── */
+        .btn {
+            width: {{ (100 / columns) | round(4) }}%;
+            padding: 5px;
+            background: transparent;
+            border: none;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* ── Button visual card ─────────────────── */
+        .btn-inner {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            position: relative;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 14px;
+            overflow: hidden;
+            -webkit-transition: -webkit-transform 0.12s ease, background 0.12s ease;
+            transition: transform 0.12s ease, background 0.12s ease;
+        }
+
+        .btn.active .btn-inner {
+            -webkit-transform: scale(0.90);
+            transform: scale(0.90);
+            background: #21262d;
+        }
+
+        /* ── Colored top accent bar ─────────────── */
+        .btn-accent {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+
+        /* ── Button content (icon + label) ──────── */
+        .btn-content {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .btn-icon {
+            font-size: 30px;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .btn-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .btn.active .btn-label {
+            color: #e6edf3;
+        }
+
+        /* ── Success flash ──────────────────────── */
+        .btn-flash {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 14px;
+            opacity: 0;
+            -webkit-transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .btn.flash .btn-flash {
+            opacity: 0.15;
+        }
+
+        /* ── Toast ──────────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            -webkit-transform: translateX(-50%) translateY(80px);
+            transform: translateX(-50%) translateY(80px);
+            background: #f85149;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            -webkit-transition: -webkit-transform 0.3s ease;
+            transition: transform 0.3s ease;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            -webkit-transform: translateX(-50%) translateY(0);
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── Landscape tweaks ───────────────────── */
+        @media (orientation: landscape) {
+            body { padding: 6px 16px; }
+            .header { padding: 2px 4px 8px 4px; }
+            .header h1 { font-size: 16px; }
+            .btn-icon { font-size: 26px; }
+            .btn-label { font-size: 9px; }
+        }
+
+        /* ── Larger iPads ───────────────────────── */
+        @media (min-width: 768px) {
+            .btn-icon { font-size: 36px; }
+            .btn-label { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>⚡ {{ title }}</h1>
+        <div class="status" id="status">● Connected</div>
+    </div>
+
+    <div class="grid" id="grid">
+        {% for btn in buttons %}
+        <button class="btn" data-id="{{ btn.id }}">
+            <div class="btn-inner">
+                <div class="btn-accent" style="background: {{ btn.color }}"></div>
+                <div class="btn-flash" style="background: {{ btn.color }}"></div>
+                <div class="btn-content">
+                    <span class="btn-icon">{{ btn.icon }}</span>
+                    <span class="btn-label">{{ btn.label }}</span>
+                </div>
+            </div>
+        </button>
+        {% endfor %}
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /* ── Send action to server ──────────────── */
+        function sendAction(buttonId, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/press', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                var ok = xhr.status === 200;
+                if (callback) callback(ok);
+                if (!ok) showToast('Action failed');
+                else setStatus(true);
+            };
+            xhr.onerror = function () {
+                if (callback) callback(false);
+                showToast('Connection lost');
+                setStatus(false);
+            };
+            xhr.send(JSON.stringify({ id: buttonId }));
+        }
+
+        /* ── Toast notifications ────────────────── */
+        var toastTimer = null;
+        function showToast(msg) {
+            var t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () {
+                t.classList.remove('show');
+            }, 2000);
+        }
+
+        /* ── Status indicator ───────────────────── */
+        function setStatus(connected) {
+            var el = document.getElementById('status');
+            if (connected) {
+                el.textContent = '\u25CF Connected';
+                el.className = 'status';
+            } else {
+                el.textContent = '\u25CF Disconnected';
+                el.className = 'status error';
+            }
+        }
+
+        /* ── Button event handlers ──────────────── */
+        var allBtns = document.querySelectorAll('.btn');
+        var holdTimeout = null;
+        var holdInterval = null;
+
+        function attachButton(btn) {
+            var id = btn.getAttribute('data-id');
+            var isVolume = (id === 'vol_up' || id === 'vol_down');
+
+            function flash() {
+                btn.classList.add('flash');
+                setTimeout(function () { btn.classList.remove('flash'); }, 300);
+            }
+
+            var moved = false;
+
+            function onTouchStart(e) {
+                moved = false;
+                btn.classList.add('active');
+
+                /* Hold-to-repeat for volume buttons */
+                if (isVolume) {
+                    holdTimeout = setTimeout(function () {
+                        if (!moved) {
+                            holdInterval = setInterval(function () {
+                                sendAction(id);
+                            }, 120);
+                        }
+                    }, 400);
+                }
+            }
+
+            function onTouchMove() {
+                moved = true;
+                btn.classList.remove('active');
+                if (holdTimeout)  { clearTimeout(holdTimeout);  holdTimeout = null; }
+                if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
+            }
+
+            function onTouchEnd(e) {
+                e.preventDefault();
+                btn.classList.remove('active');
+                if (holdTimeout)  { clearTimeout(holdTimeout);  holdTimeout = null; }
+                if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
+                if (!moved) {
+                    sendAction(id, function (ok) { if (ok) flash(); });
+                }
+            }
+
+            function onMouseDown() {
+                btn.classList.add('active');
+                sendAction(id, function (ok) { if (ok) flash(); });
+                if (isVolume) {
+                    holdTimeout = setTimeout(function () {
+                        holdInterval = setInterval(function () {
+                            sendAction(id);
+                        }, 120);
+                    }, 400);
+                }
+            }
+
+            function onMouseUp() {
+                btn.classList.remove('active');
+                if (holdTimeout)  { clearTimeout(holdTimeout);  holdTimeout = null; }
+                if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
+            }
+
+            btn.addEventListener('touchstart',  onTouchStart, false);
+            btn.addEventListener('touchmove',   onTouchMove,  false);
+            btn.addEventListener('touchend',    onTouchEnd,   false);
+            btn.addEventListener('touchcancel', onTouchMove,  false);
+            btn.addEventListener('mousedown',   onMouseDown,  false);
+            btn.addEventListener('mouseup',     onMouseUp,    false);
+            btn.addEventListener('mouseleave',  onMouseUp,    false);
+        }
+
+        for (var i = 0; i < allBtns.length; i++) {
+            attachButton(allBtns[i]);
+        }
+
+        /* ── Periodic connection check ──────────── */
+        setInterval(function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('HEAD', '/', true);
+            xhr.timeout = 3000;
+            xhr.onload  = function () { setStatus(true); };
+            xhr.onerror = function () { setStatus(false); };
+            xhr.ontimeout = function () { setStatus(false); };
+            xhr.send();
+        }, 10000);
+
+        /* ── Prevent iOS pinch-to-zoom ──────────── */
+        document.addEventListener('touchmove', function (e) {
+            if (e.touches.length > 1) e.preventDefault();
+        }, false);
+    </script>
+
+</body>
+</html>
